@@ -35,29 +35,86 @@ class SectionHeader extends StatelessWidget {
         );
 
     final titleSize = context.isMobile ? 30.0 : 38.0;
+    final baseTitleColor = titleColor ?? AppColors.accentLavender;
 
     return Transform.translate(
       offset: Offset(nudge, 0),
       child: Column(
         children: [
-          Text(
-            label.toUpperCase(),
-            textAlign: TextAlign.center,
-            style: labelStyle,
-          ),
+          _LabelChip(label: label.toUpperCase(), style: labelStyle),
           SizedBox(height: labelToTitleGap),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Color.lerp(
-                    titleColor ?? AppColors.accentLavender,
-                    Colors.white,
-                    0.04 * breathe,
+          ShaderMask(
+            blendMode: BlendMode.srcIn,
+            shaderCallback: (bounds) => LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.white,
+                Color.lerp(baseTitleColor, Colors.white, 0.18 * breathe)!,
+                AppColors.buttonGradientStart,
+              ],
+              stops: const [0.0, 0.55, 1.0],
+            ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: titleSize,
+                    height: 1.15,
                   ),
-                  fontWeight: FontWeight.w800,
-                  fontSize: titleSize,
-                ),
+            ),
+          ),
+          SizedBox(height: context.isMobile ? 12 : 14),
+          _TitleUnderline(breathe: breathe),
+        ],
+      ),
+    );
+  }
+}
+
+/// Pill behind the small section label so each section starts with a marker.
+class _LabelChip extends StatelessWidget {
+  const _LabelChip({required this.label, required this.style});
+
+  final String label;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        color: AppColors.buttonGradientStart.withValues(alpha: 0.10),
+        border: Border.all(
+          color: AppColors.buttonGradientStart.withValues(alpha: 0.30),
+        ),
+      ),
+      child: Text(label, textAlign: TextAlign.center, style: style),
+    );
+  }
+}
+
+class _TitleUnderline extends StatelessWidget {
+  const _TitleUnderline({required this.breathe});
+
+  final double breathe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 56 + 10 * breathe,
+      height: 3,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(999),
+        gradient: AppColors.primaryButtonGradient,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.buttonGradientStart.withValues(alpha: 0.45),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),

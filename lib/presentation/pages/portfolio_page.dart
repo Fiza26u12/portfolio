@@ -273,7 +273,7 @@ class _PortfolioPageState extends State<PortfolioPage>
         child: Column(
           children: [
             const SectionHeader(label: 'Skills', title: 'Technical Stack'),
-            SizedBox(height: context.isMobile ? 18 : 26),
+            SizedBox(height: context.isMobile ? 26 : 34),
             HexSkillsHoneycomb(skills: PortfolioContent.skills),
             SizedBox(height: sectionVerticalGap(context)),
           ],
@@ -288,7 +288,7 @@ class _PortfolioPageState extends State<PortfolioPage>
       child: Column(
         children: [
           const SectionHeader(label: 'Journey', title: 'Experience'),
-          SizedBox(height: context.isMobile ? 18 : 26),
+          SizedBox(height: context.isMobile ? 26 : 34),
           ExperienceTimeline(items: PortfolioContent.experience),
           SizedBox(height: sectionVerticalGap(context)),
         ],
@@ -304,11 +304,11 @@ class _PortfolioPageState extends State<PortfolioPage>
         child: Column(
           children: [
             const SectionHeader(label: 'Work', title: 'Featured Projects'),
-            SizedBox(height: context.isMobile ? 18 : 26),
+            SizedBox(height: context.isMobile ? 26 : 34),
             LayoutBuilder(
               builder: (context, constraints) {
                 final maxW = constraints.maxWidth;
-                final gap = 20.0;
+                final gap = context.isMobile ? 18.0 : 24.0;
                 final cardH = projectCardHeight(context);
 
                 final columns = maxW >= 1100
@@ -355,7 +355,7 @@ class _PortfolioPageState extends State<PortfolioPage>
               label: 'Education',
               title: 'Academic Background',
             ),
-            SizedBox(height: context.isMobile ? 18 : 26),
+            SizedBox(height: context.isMobile ? 26 : 34),
             const EducationCard(),
             SizedBox(height: sectionVerticalGap(context)),
           ],

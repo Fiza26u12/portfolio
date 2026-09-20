@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/app_colors.dart';
+import '../../core/link_launcher.dart';
 import '../../core/responsive.dart';
 import '../../data/portfolio_content.dart';
 import '../animation/portfolio_motion.dart';
@@ -11,13 +11,6 @@ import 'portfolio_glass_panel.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
-
-  Future<void> _launch(Uri uri) async {
-    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!ok) {
-      // No-op: launching can fail on some desktop/web setups without handlers.
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +20,10 @@ class ContactSection extends StatelessWidget {
       borderRadius: 26,
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-          isNarrow ? 18 : 28,
-          26,
-          isNarrow ? 18 : 28,
-          26,
+          isNarrow ? 20 : 32,
+          isNarrow ? 30 : 38,
+          isNarrow ? 20 : 32,
+          isNarrow ? 28 : 34,
         ),
         child: Column(
           children: [
@@ -43,7 +36,7 @@ class ContactSection extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             Text(
               PortfolioContent.contactHeading,
               textAlign: TextAlign.center,
@@ -52,19 +45,19 @@ class ContactSection extends StatelessWidget {
                     fontWeight: FontWeight.w900,
                   ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
               child: Text(
                 PortfolioContent.contactBody,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.bodyText,
-                      height: 1.55,
+                      color: AppColors.bodyText.withValues(alpha: 0.88),
+                      height: 1.6,
                     ),
               ),
             ),
-            const SizedBox(height: 22),
+            SizedBox(height: isNarrow ? 26 : 30),
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 14,
@@ -73,33 +66,102 @@ class ContactSection extends StatelessWidget {
                 _GradientContactButton(
                   icon: Icons.mail_outline_rounded,
                   label: PortfolioContent.email,
-                  onPressed: () => _launch(Uri.parse('mailto:${PortfolioContent.email}')),
+                  onPressed: () => LinkLauncher.openScheme(
+                    'mailto:${PortfolioContent.email}',
+                  ),
                 ),
                 _OutlinedContactButton(
                   icon: Icons.smartphone_rounded,
                   label: '+91 ${PortfolioContent.phoneDisplay}',
-                  onPressed: () => _launch(Uri.parse('tel:${PortfolioContent.phoneDial}')),
+                  onPressed: () => LinkLauncher.openScheme(
+                    'tel:${PortfolioContent.phoneDial}',
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 18),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            SizedBox(height: isNarrow ? 24 : 28),
+            const _SocialDivider(),
+            SizedBox(height: isNarrow ? 20 : 22),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 14,
+              runSpacing: 12,
               children: [
-                _SocialCircleButton(
-                  label: 'L',
+                _SocialIconButton(
                   tooltip: 'LinkedIn',
-                  onPressed: () => _launch(Uri.parse(PortfolioContent.linkedinUrl)),
+                  semanticLabel: 'Open LinkedIn profile',
+                  brandColor: AppColors.linkedIn,
+                  icon: const LinkedInGlyph(size: 20),
+                  onPressed: () =>
+                      LinkLauncher.openExternal(PortfolioContent.linkedinUrl),
                 ),
-                const SizedBox(width: 12),
-                _SocialCircleButton(
-                  label: 'E',
-                  tooltip: 'Email',
-                  onPressed: () => _launch(Uri.parse('mailto:${PortfolioContent.email}')),
+                _SocialIconButton(
+                  tooltip: PortfolioContent.email,
+                  semanticLabel: 'Send an email',
+                  brandColor: AppColors.buttonGradientStart,
+                  icon: const Icon(
+                    Icons.alternate_email_rounded,
+                    size: 22,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => LinkLauncher.openScheme(
+                    'mailto:${PortfolioContent.email}',
+                  ),
                 ),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Thin gradient rule that separates the CTA buttons from the social icons.
+class _SocialDivider extends StatelessWidget {
+  const _SocialDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 220),
+      child: Container(
+        height: 1,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.accentLavender.withValues(alpha: 0.0),
+              AppColors.accentLavender.withValues(alpha: 0.38),
+              AppColors.accentLavender.withValues(alpha: 0.0),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// LinkedIn "in" mark drawn as text so no brand asset or extra package is needed.
+class LinkedInGlyph extends StatelessWidget {
+  const LinkedInGlyph({super.key, this.size = 20});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Center(
+        child: Text(
+          'in',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: size * 0.82,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -0.5,
+            height: 1,
+          ),
         ),
       ),
     );
@@ -141,7 +203,7 @@ class _GradientContactButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: onPressed,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -192,7 +254,7 @@ class _OutlinedContactButton extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -214,38 +276,69 @@ class _OutlinedContactButton extends StatelessWidget {
   }
 }
 
-class _SocialCircleButton extends StatelessWidget {
-  const _SocialCircleButton({
-    required this.label,
-    required this.onPressed,
+/// Circular social badge: brand-tinted ring that fills in on hover.
+class _SocialIconButton extends StatefulWidget {
+  const _SocialIconButton({
+    required this.icon,
     required this.tooltip,
+    required this.semanticLabel,
+    required this.brandColor,
+    required this.onPressed,
   });
 
-  final String label;
-  final VoidCallback onPressed;
+  final Widget icon;
   final String tooltip;
+  final String semanticLabel;
+  final Color brandColor;
+  final VoidCallback onPressed;
+
+  @override
+  State<_SocialIconButton> createState() => _SocialIconButtonState();
+}
+
+class _SocialIconButtonState extends State<_SocialIconButton> {
+  bool _hovered = false;
+
+  void _setHovered(bool value) {
+    if (_hovered == value) return;
+    setState(() => _hovered = value);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: tooltip,
-      child: Material(
-        color: AppColors.aboutCardSurface,
-        shape: const CircleBorder(),
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onPressed,
-          child: SizedBox(
-            width: 44,
-            height: 44,
-            child: Center(
-              child: Text(
-                label,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
+      message: widget.tooltip,
+      child: Semantics(
+        button: true,
+        label: widget.semanticLabel,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) => _setHovered(true),
+          onExit: (_) => _setHovered(false),
+          child: GestureDetector(
+            onTap: widget.onPressed,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.brandColor.withValues(alpha: _hovered ? 0.95 : 0.16),
+                border: Border.all(
+                  color: widget.brandColor.withValues(alpha: _hovered ? 1.0 : 0.5),
+                  width: 1.4,
+                ),
+                boxShadow: [
+                  if (_hovered)
+                    BoxShadow(
+                      color: widget.brandColor.withValues(alpha: 0.42),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
                     ),
+                ],
               ),
+              child: Center(child: widget.icon),
             ),
           ),
         ),

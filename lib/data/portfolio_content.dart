@@ -15,20 +15,20 @@ abstract final class PortfolioContent {
       'https://www.linkedin.com/in/fiza-sheikh-11622224a';
   static const String phoneDisplay = '8789776383';
   static const String phoneDial = '+918789776383';
-  static const String location = 'Chandigarh';
+  static const String location = 'Mohali, India';
 
   static const String heroTaglineLead = 'Flutter Developer ';
   static const String heroTaglineHighlight =
       'crafting beautiful mobile experiences';
 
   static const String heroDescription =
-      '2+ years building scalable, high-performance cross-platform mobile applications '
+      '2.5+ years building scalable, high-performance cross-platform mobile applications '
       'with Flutter, Firebase, REST APIs and clean architecture.';
 
   static const List<StatItem> stats = [
     StatItem(
       emoji: '⚡',
-      value: '2+',
+      value: '2.5+',
       label: 'Years of Experience',
       emojiColor: AppColors.aboutStatEmoji,
     ),

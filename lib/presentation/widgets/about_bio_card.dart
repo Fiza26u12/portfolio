@@ -42,7 +42,7 @@ class AboutBioCard extends StatelessWidget {
                         ' proficient in Flutter, Firebase, RESTful APIs and backend integration. Skilled in using ',
                   ),
                   TextSpan(
-                    text: 'BLoC and GetX',
+                    text: 'GetX',
                     style: TextStyle(
                       color: AppColors.aboutBioHighlight,
                       fontWeight: FontWeight.w800,

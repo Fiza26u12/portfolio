@@ -44,6 +44,13 @@ abstract final class AppColors {
   static const Color aboutStatEmojiPhone = Color(0xFF4ADE80);
   static const Color aboutStatEmojiStars = Color(0xFFFBBF24);
 
+  /// Panel depth: subtle violet lift at the top-left fading to the base surface.
+  static const Color panelSurfaceTop = Color(0xFF190B2D);
+  static const Color panelSurfaceBottom = Color(0xFF0A0116);
+
+  /// Brand colour for the LinkedIn badge.
+  static const Color linkedIn = Color(0xFF0A66C2);
+
   /// M3 / seed fallbacks
   static const Color accentViolet = buttonGradientEnd;
 }

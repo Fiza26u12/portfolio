@@ -28,16 +28,16 @@ double aboutSectionHorizontalPadding(BuildContext context) {
 }
 
 double sectionVerticalGap(BuildContext context) {
-  if (context.isMobile) return 84;
-  if (context.isTablet) return 108;
-  return 140;
+  if (context.isMobile) return 72;
+  if (context.isTablet) return 92;
+  return 112;
 }
 
 /// Extra space between hero (contact row) and About / "Who I Am" (reference layout).
 double heroToAboutSpacing(BuildContext context) {
-  if (context.isMobile) return 124;
-  if (context.isTablet) return 152;
-  return 196;
+  if (context.isMobile) return 88;
+  if (context.isTablet) return 108;
+  return 128;
 }
 
 double heroBottomPadding(BuildContext context) {
@@ -67,15 +67,15 @@ double heroCtaRowVerticalGap(BuildContext context) {
 }
 
 double aboutLabelToTitleGap(BuildContext context) {
-  if (context.isMobile) return 36;
-  if (context.isTablet) return 40;
-  return 44;
+  if (context.isMobile) return 18;
+  if (context.isTablet) return 20;
+  return 22;
 }
 
 double aboutTitleToStatsGap(BuildContext context) {
-  if (context.isMobile) return 52;
-  if (context.isTablet) return 60;
-  return 72;
+  if (context.isMobile) return 32;
+  if (context.isTablet) return 38;
+  return 44;
 }
 
 double aboutStatsToBioGap(BuildContext context) {
