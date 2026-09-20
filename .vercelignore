@@ -1,0 +1,11 @@
+android
+ios
+linux
+macos
+windows
+.idea
+.dart_tool
+build
+test
+.vercel-flutter
+*.iml
